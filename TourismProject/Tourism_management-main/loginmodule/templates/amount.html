@@ -1,0 +1,52 @@
+<!-- amount.html -->
+
+{% extends 'home.html' %}
+{% block content %}
+    <div class="wrapper">
+        <h2>Payment Mode Selection</h2>
+        <div class="w3ls-form">
+            <form action="/PaymentApp/makepayment/" method="post">{% csrf_token %}
+                <label>Select Payment mode</label>
+                <select name="mode">
+                    <option>Credit card</option>
+                    <option>Net banking</option>
+                    <option>Debit Card</option>
+                </select>
+                <input type="hidden" id="totalAmount" value="{{ request.session.total_amount }}">
+                <label for="numPeople">Number of People</label>
+                <input type="number" id="numPeople" name="num_people" placeholder="Enter the number of people" min="1" required>
+                
+                <label for="calculatedAmount">Calculated Amount</label>
+                <p id="calculatedAmount" style="color: red; text-align: center;"></p>
+
+                <input type="submit" value="Confirm Booking" />
+            </form>
+
+            <script>
+                // Get references to the input elements and the paragraph where the calculated amount will be displayed
+                const numPeopleInput = document.getElementById('numPeople');
+                const totalAmountInput = document.getElementById('totalAmount');
+                const calculatedAmountDisplay = document.getElementById('calculatedAmount');
+
+                // Calculate the total amount when the number of people changes
+                numPeopleInput.addEventListener('input', updateCalculatedAmount);
+
+                function updateCalculatedAmount() {
+                    const numPeople = parseInt(numPeopleInput.value);
+                    const totalAmount = parseFloat(totalAmountInput.value);
+                    const calculatedAmount = numPeople * totalAmount;
+
+                    if (!isNaN(calculatedAmount)) {
+                        calculatedAmountDisplay.textContent = `You Have to Pay ${calculatedAmount}`;
+                    } else {
+                        calculatedAmountDisplay.textContent = '';
+                    }
+                }
+
+                // Initialize the calculated amount when the page loads
+                updateCalculatedAmount();
+            </script>
+        </div>
+    </div>
+    <br>
+{% endblock %}

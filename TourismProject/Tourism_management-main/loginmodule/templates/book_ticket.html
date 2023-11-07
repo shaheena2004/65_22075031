@@ -1,0 +1,62 @@
+<!-- book_Ticket.html -->
+
+{% extends 'home.html' %}
+<div class="agile-login">
+{% block content %}
+		<div class="wrapper">
+			<h2>Book tour</h2>
+			<div class="w3ls-form">
+				<form action="/BookTicketApp/bookingdataadd/" method="post">{% csrf_token %}
+                <label>Booking id</label>
+                <input type="text" name="bookingid" value="{{ randomid }}"  readonly maxlength="6">
+                 <label>From</label>
+                 <input type="text" name="source" placeholder="Enter a location">
+                <label>To</label>
+                <select name="destination">
+                    <option>Varanasi</option>
+                    <option>Delhi</option>
+                    <option>Kerala</option>
+                    <option>Ladakh</option>
+                    <option>Shimla</option>
+                    <option>Goa</option>
+
+                </select>
+                <p style="color: red">{{ request.session.error3 }}</p>
+                <label>Package</label>
+                <select name="package">
+                {% for pack in packs %}
+                    <option value='{{ pack.pack_name }}'>{{ pack.pack_name }}</option>
+
+                {% endfor %}
+                </select>
+
+                    <label>TourStart date</label>
+                    <input id="datefield" type="date" name="fromdate" onload="setMinDate()">
+                    <script>
+                        setMinDate();
+                        function setMinDate(){
+                            var today = new Date();
+                            var dd = today.getDate();
+                            var mm = today.getMonth()+1;
+                            var yyyy = today.getFullYear();
+                            if(dd<10){
+                                dd='0'+dd
+                            }
+                            if(mm<10){
+                                mm='0'+mm
+                            }
+                            today = yyyy+'-'+mm+'-'+dd;
+                            document.getElementById("datefield").setAttribute("min", today);
+                        }
+                    </script>
+                    
+                   
+                    <label>Number of People</label>
+                      <input type="number" name="num_people" placeholder="Enter the number of people" min="1" required>
+                <input type="submit" value="book" />
+				</form>
+            </div>
+        </div>
+		<br>
+{% endblock %}
+</div>
